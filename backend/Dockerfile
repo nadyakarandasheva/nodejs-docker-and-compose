@@ -18,7 +18,7 @@ WORKDIR /app
 RUN npm install -g pm2
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --omit=optional
 
 COPY --from=builder /app/dist ./dist
 
