@@ -14,7 +14,7 @@ import { HashModule } from '../hash/hash.module';
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: 'JWT_SECRET',
+      secret: process.env.JWT_SECRET,
       signOptions: {
         expiresIn: '1d',
       },

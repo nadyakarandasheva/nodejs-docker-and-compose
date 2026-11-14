@@ -1,0 +1,40 @@
+services:
+  backend:
+    container_name: kupipodariday-backend
+    build:
+      context: ./backend
+    env_file:
+      - .env
+    ports:
+      - "4000:3000"
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    container_name: kupipodariday-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "8081:80"
+    restart: unless-stopped
+
+  database:
+    container_name: kupipodariday-database
+    image: postgres:14-alpine
+    env_file:
+      - .env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
